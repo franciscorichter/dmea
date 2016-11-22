@@ -1,9 +1,9 @@
 Package: dmea
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Title: Diversification and Macro-Evolution Analysis
+Version: 0.1.3
+Author: F. Richter Mendoza
+Maintainer: Francisco Richter M <f.richter@rug.nl>
+Description: Set of statistical tools for the study of diversification of species and ecological drivers in macro-evolution.
+License: Creative Commons Public Licenses
 LazyData: TRUE
