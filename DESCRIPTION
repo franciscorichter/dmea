@@ -7,3 +7,9 @@ Maintainer: Francisco Richter M <f.richter@rug.nl>
 Description: Set of statistical tools for the study of diversification of species and ecological drivers in macro-evolution.
 License: Creative Commons Public Licenses
 LazyData: TRUE
+Depends:
+    ape,
+    subplex,
+    ggplot2,
+    latex2exp,
+    gridExtra
