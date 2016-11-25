@@ -44,7 +44,7 @@ for(j in 1:1000){
 }
 
 
-par_est_vis(P=MP3,par=1,PR=RP3) ## looks good
+par_est_vis(P=KK,par=1,PR=RP) ## looks good
 
 
   ## EM
@@ -58,8 +58,8 @@ for(j in 1:1000){
   RP[j,] = p
   sit = drop.fossil(st$newick)
   sit = phylo2p(sit)
-  parsis = EM_phylo(bt=sit$t,init_par = init,n_trees=500,n_it=2,printpar = F)
-  KK[j,]=parsis
+  parsis = EM_phylo(bt=sit$t,init_par = init,n_trees=100,n_it=2,printpar = F)
+  KK[j,] = parsis
 }
 
 
@@ -186,3 +186,26 @@ for (h in 2:6){
 
 print(ggplot(Msmp[Msmp$mu=='diff incomplete phylogeny',],aes(x=time, y=val,color=val_mu))+geom_smooth()+ylab('number of lineages (log)')+xlab('time (Myr)')+ scale_y_log10()+ggtitle(paste('Extinction rate',as.character(0.05*h))))
 
+
+
+
+
+
+
+library(DDD)
+s3 <- dd_sim(c(0.8,0.1,40),15)
+p = proc.time()
+dd_ML(brts = branching.times(s3$tes) ,initparsopt =c(0.8,0.1,40), idparsopt = 1:3,cond = 0, tol = c(1E-3,1E-3,1E-4), optimmethod = 'simplex')
+print(proc.time()-p)
+
+st = sim_phyl(seed = round(runif(1,0,j*100)))
+sit = drop.fossil(st$newick)
+sit = phylo2p(sit)
+p = proc.time()
+parsis = EM_phylo(bt=sit$t,init_par = c(0.8,0.0175,0.1) ,n_trees=100,n_it=2,printpar = F)
+print(parsis)
+print(proc.time()-p)
+
+s1 <-L2p(L=s3$L)
+p2 <- mle_dd(n=s1$n,E=s1$E,t=s1$t)
+c(p2$lambda,(p$lambda-p$mu)/p$beta,p2$mu)
