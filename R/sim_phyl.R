@@ -1,7 +1,7 @@
 ### Phylogenetic tree simulation
-sim_phyl <- function(ct=15, lambda0=0.8, mu0=0.1, K=40, draw=TRUE, model="dd",printEv=FALSE,seed=7){
+sim_phyl <- function(ct=15, lambda0=0.8, mu0=0.1, K=40, draw=TRUE, model="dd",printEv=FALSE,seed=round(runif(1,0,1000))){
   ## Set up
-  set.seed(seed)
+  #set.seed(seed)
   i = 1
   N = 1 # Starting number of species
   Tm = NULL # Waiting times
@@ -11,6 +11,7 @@ sim_phyl <- function(ct=15, lambda0=0.8, mu0=0.1, K=40, draw=TRUE, model="dd",pr
   reboot = 0 # this is in case we want to check how many reboots the simulation had.
   newick = paste(sl[1],";",sep="")  # Newick tree
   identf = data.frame(Spec="aa",Time=0) # Labels of species
+  L = data.frame(spec='aa', spec_time=0, ext_time=-1, parent = '00')
   while (sumt<ct){
     if(model == "dd"){  # diversity-dependence model
       lambda = max(0,lambda0 - (lambda0-mu0)*N/K)
@@ -37,8 +38,8 @@ sim_phyl <- function(ct=15, lambda0=0.8, mu0=0.1, K=40, draw=TRUE, model="dd",pr
       ind = regexpr(species,newick)[1] + 2
       atm = sumt-identf[which(identf[,1]==species),2]
       identf = identf[-(BD-N),]
+      L[L$spec == species,]$ext_time = sumt
       newick = paste(substr(newick,1,ind),as.character(atm),substring(newick,ind+2),sep="")
-      #
       N = N-1
       if(printEv){print(paste("extinction in time",sumt, sep=" "))}
     }else{  # Speciation
@@ -50,6 +51,7 @@ sim_phyl <- function(ct=15, lambda0=0.8, mu0=0.1, K=40, draw=TRUE, model="dd",pr
       newick = paste(substr(newick,1,ind),"(",substr(newick,ind+1,ind+4),",",sl[i+1],"):",as.character(atm),substring(newick,ind+5),sep="")
       identf = rbind(identf,data.frame(Spec=substr(sl[i+1],1,2),Time=sumt))
       identf[identf$Spec == species,2] = sumt
+      L = rbind(L,data.frame(spec=substr(sl[i+1],1,2), spec_time=sumt, ext_time=-1, parent=species))
       N = N+1
       if(printEv){print(paste("speciation in time",sumt,sep=" "))}
     }
@@ -73,5 +75,5 @@ sim_phyl <- function(ct=15, lambda0=0.8, mu0=0.1, K=40, draw=TRUE, model="dd",pr
   newick = read.tree(text=newick)
   Tm[i] = ct-sum(Tm)
   n[i] = n[i-1] + E[i-1] -(1-E[i-1])
-  return(list(t=Tm, E=E, n=n, newick=newick, br = cumsum(Tm), newi = newi))
+  return(list(t=Tm, E=E, n=n, newick=newick, br = cumsum(Tm), newi = newi, L=L))
 }

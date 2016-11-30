@@ -12,4 +12,6 @@ Depends:
     subplex,
     ggplot2,
     latex2exp,
-    gridExtra
+    gridExtra,
+    foreach,
+    doParallel

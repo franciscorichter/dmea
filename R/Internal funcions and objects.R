@@ -106,4 +106,12 @@ par_est_vis <- function(P,par,PR){
   grid.arrange(hist_top, empty, scatter, hist_right, ncol=2, nrow=2, widths=c(4, 1), heights=c(1, 4))
 }
 
+drop.fossil <- function (phy, tol = 1e-08)
+{
+  n <- Ntip(phy)
+  x <- dist.nodes(phy)[n + 1, ][1:n]
+  drop.tip(phy,root.edge = T ,which(x < max(x) - tol))
+}
+
+
 
