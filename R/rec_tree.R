@@ -1,4 +1,9 @@
-rec_tree <- function(wt, pars=c(0.8,0.0175,0.1), model='dd'){
+rec_tree <- function(obs_tree, pars=c(0.8,0.0175,0.1), model='dd'){
+  if(class(obs_tree)=='phylo'){
+    sit = phylo2p(obs_tree)
+    wt = sit$t
+    newick = write.tree(obs_tree)
+  }
   lambda0 = pars[1]
   mu0 = pars[3]
   K = (lambda0-mu0)/pars[2]
@@ -56,5 +61,6 @@ rec_tree <- function(wt, pars=c(0.8,0.0175,0.1), model='dd'){
     }
     i = i+1
   }
-  return(list(wt=wt,E=E,n=n,prob=prob))
+#  newick = p2phylo(wt,E,)
+  return(list(wt=wt,E=E,n=n,prob=prob,newick=newick))
 }

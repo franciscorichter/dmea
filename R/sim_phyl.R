@@ -1,7 +1,7 @@
 ### Phylogenetic tree simulation
-sim_phyl <- function(ct=15, lambda0=0.8, mu0=0.1, K=40, draw=TRUE, model="dd",printEv=FALSE,seed=round(runif(1,0,1000))){
+sim_phyl <- function(ct=15, lambda0=0.8, mu0=0.1, K=40, model="dd", printEv=FALSE, seed=F, seed_val=NULL){
   ## Set up
-  #set.seed(seed)
+  if(seed) {set.seed(seed_val)}
   i = 1
   N = 1 # Starting number of species
   Tm = NULL # Waiting times
@@ -47,7 +47,7 @@ sim_phyl <- function(ct=15, lambda0=0.8, mu0=0.1, K=40, draw=TRUE, model="dd",pr
       ## for newick output
       species = as.character(identf[BD,1])
       ind = regexpr(species,newick)[1]-1
-      atm=sumt-identf[which(identf[,1]==species),2]
+      atm = sumt-identf[which(identf[,1]==species),2]
       newick = paste(substr(newick,1,ind),"(",substr(newick,ind+1,ind+4),",",sl[i+1],"):",as.character(atm),substring(newick,ind+5),sep="")
       identf = rbind(identf,data.frame(Spec=substr(sl[i+1],1,2),Time=sumt))
       identf[identf$Spec == species,2] = sumt
@@ -74,6 +74,6 @@ sim_phyl <- function(ct=15, lambda0=0.8, mu0=0.1, K=40, draw=TRUE, model="dd",pr
   newi = newick
   newick = read.tree(text=newick)
   Tm[i] = ct-sum(Tm)
-  n[i] = n[i-1] + E[i-1] -(1-E[i-1])
+  n[i] = n[i-1] + E[i-1] - (1-E[i-1])
   return(list(t=Tm, E=E, n=n, newick=newick, br = cumsum(Tm), newi = newi, L=L))
 }
