@@ -8,7 +8,7 @@ For instalation please
 
  1. download the .zip file and save the containing folder. 
  2. open 'dmea.Rproj' with Rstudio
- 3. Run the code above to be sure you have all dependences needed 
+ 3. Run the code below to be sure you have all dependences needed 
  
  ```{r}
  ipak <- function(pkg){
@@ -22,9 +22,8 @@ For instalation please
 packages <- c("ape","subplex","latex2exp","gridExtra","foreach","doParallel")
 ipak(packages)
 ```
-
- 3. under build menu, click on build and reload
- 4. you should have the dmea package on your library now, type ```library('dmea')``` to check it.
+ 4. under build menu, click on build and reload
+ 5. you should have the dmea package on your library now, type ```library('dmea')``` to check it.
  
  
  
