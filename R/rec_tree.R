@@ -63,5 +63,6 @@ rec_tree <- function(obs_tree, pars=c(0.8,0.0175,0.1), model='dd'){
     i = i+1
   }
 #  newick = p2phylo(wt,E,)
-  return(list(wt=wt,E=E,n=n,prob=prob,newick=newick))
+  L = create_L(wt,E)
+  return(list(wt=wt,E=E,n=n,prob=prob,L=L))
 }
