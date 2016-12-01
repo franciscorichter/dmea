@@ -1,3 +1,4 @@
+#hacer la tabla L.
 rec_tree <- function(obs_tree, pars=c(0.8,0.0175,0.1), model='dd'){
   if(class(obs_tree)=='phylo'){
     sit = phylo2p(obs_tree)
