@@ -55,14 +55,14 @@ update_tree <- function(wt, t_spe, t_ext, E, n){
 
 
 ###
-llik_st = function(pars,setoftrees,impsam = F,setofweith=0){
+llik_st = function(pars, setoftrees, impsam = F, setofweight = 0){
   m = length(setoftrees)
   l = NULL
   for(i in 1:m){
     s = setoftrees[[i]]
-    weith= setofweith[i]
+    weight= setofweight[i]
     if(impsam){
-      l[i] = llik(b=pars,n=s$n,E=s$E,t=s$wt)*llik(b=pars,n=s$n,E=s$E,t=s$wt)/weith
+      l[i] = llik(b=pars,n=s$n,E=s$E,t=s$wt)*weight
     }else{
       l[i] = llik(b=pars,n=s$n,E=s$E,t=s$wt)
     }
@@ -113,5 +113,32 @@ drop.fossil <- function (phy, tol = 1e-08)
   drop.tip(phy,root.edge = T ,which(x < max(x) - tol))
 }
 
+
+num_weigh <- function(rec_tree, pars_rec, ct){
+  lambda0 = pars_rec[1]
+  beta = pars_rec[2]
+  mu = pars_rec[3]
+  L = rec_tree$L
+  wt = rec_tree$t
+  miss <- L[L[,3]!=(-1),]
+  miss_spe <- miss$spec
+  time <- rbind(data.frame(brtimes = L[,2], E=1, spec = L[,1]),data.frame(brtimes = miss[,3], E=0, spec = miss[,1]))
+  time <- time[order(time$brtimes),]
+  time$n <- cumsum(time$E)-cumsum(1-time$E)
+  time$n <- c(0,time$n[1:length(time$n)-1])
+  missing = time[which(is.element(time$spec,miss_spe)),]
+  if(dim(missing)[1]<1){print('THERE IS NOT MISSING SPECIES')}
+  m_spec = unique(missing$spec)
+  P = matrix(nrow = length(m_spec), ncol=1)
+  for(i in 1:length(m_spec)){
+    sub_mat = missing[missing$spec == m_spec[j],]
+    suml = sub_mat$n[1]*(lambda0-beta*sub_mat$n[1])
+    t_ext = sub_mat$brtimes[2]-sub_mat$brtimes[1]
+    P[i] = suml*exp(wt[i]*suml)*(1/ sub_mat$n[1])*(mu*exp(t_ext*mu)/(1-exp(-mu*(ct-sub_mat$brtimes[1]))))
+    print(suml*exp(wt[i]*suml)*(1/ sub_mat$n[1])*(mu*exp(t_ext*mu)/(1-exp(-mu*(ct-sub_mat$brtimes[1])))))
+  }
+  prob = sum(log(P))
+  return(prob)
+}
 
 

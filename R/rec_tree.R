@@ -64,5 +64,7 @@ rec_tree <- function(obs_tree, pars=c(0.8,0.0175,0.1), model='dd'){
   }
 #  newick = p2phylo(wt,E,)
   L = create_L(wt,E)
-  return(list(wt=wt,E=E,n=n,prob=prob,L=L))
+  n_prob = num_weigh(rec_tree=list(wt=wt,E=E,n=n,L=L), pars_rec = pars, ct=ct)
+  weight = n_prob/prob
+  return(list(wt=wt,E=E,n=n,weight=weight,L=L))
 }
