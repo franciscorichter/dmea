@@ -1,15 +1,11 @@
 #hacer la tabla L.
-rec_tree <- function(obs_tree, pars=c(0.8,0.0175,0.1), model='dd'){
-  if(class(obs_tree)=='phylo'){
-    sit = phylo2p(obs_tree)
-    wt = sit$t
-    newick = write.tree(obs_tree)
-  }
+rec_tree <- function(wt, pars=c(0.8,0.0175,0.1), model='dd'){
   lambda0 = pars[1]
   mu0 = pars[3]
   K = (lambda0-mu0)/pars[2]
   n = 1:length(wt)
   i = 1
+  tails = tail(n,n=1)
   E = rep(1,(length(wt)-1))
   fake = FALSE
   ct = sum(wt)
@@ -46,11 +42,13 @@ rec_tree <- function(obs_tree, pars=c(0.8,0.0175,0.1), model='dd'){
       prob = prob + log(1-exp(-s*cwt))
       if (t_ext < ct){
         up = update_tree(wt=wt,t_spe = (cbt + t_spe), t_ext = t_ext, E = E, n = n)
+        if(tail(n,n=1)!= tails) print(paste('WARNING!','N'))
         E = up$E
         n = up$n
         wt = up$wt
         fake = FALSE
         prob = prob + log(1-exp(-mu0*(ct-t_spe-cbt)))
+        #print(tail(up$n,n=1))
       }else{
         prob = prob - mu0*(ct-t_spe-cbt)
         fake = TRUE
@@ -64,7 +62,12 @@ rec_tree <- function(obs_tree, pars=c(0.8,0.0175,0.1), model='dd'){
   }
 #  newick = p2phylo(wt,E,)
   L = create_L(wt,E)
-  n_prob = num_weigh(rec_tree=list(wt=wt,E=E,n=n,L=L), pars_rec = pars, ct=ct)
-  weight = n_prob/prob
+  if(max(n)>=46){
+    n_prob=0}
+  else{
+    n_prob = num_weigh(rec_tree=list(wt=wt,E=E,n=n,L=L), pars_rec = pars, ct=ct)
+  }
+  weight = -n_prob/prob
+  #print(weight)
   return(list(wt=wt,E=E,n=n,weight=weight,L=L))
 }
