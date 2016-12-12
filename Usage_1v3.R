@@ -53,13 +53,13 @@ RP = matrix(nrow=1000,ncol=3)
 init = c(4,0.175,1)
 for(j in 1:1000){
   print(j)
-  st = sim_phyl(seed = round(runif(1,0,j*100)))
+  st = sim_phyl(seed = 1025273)
   p <- subplex(par = c(8,0.175,0.9),fn = llik,n = st$n, E = st$E, t = st$t)$par
   RP[j,] = p
   sit = drop.fossil(st$newick)
   sit = phylo2p(sit)
-  parsis = EM_phylo(bt=sit$t,init_par = init,n_trees=100,n_it=2,printpar = F)
-  KK[j,] = parsis
+  parsis = EM_phylo(wt=sit$t, init_par = init, n_trees=100, n_it=10, printpar = T, impsam = TRUE)
+  parKK[j,] = parsis
 }
 
 

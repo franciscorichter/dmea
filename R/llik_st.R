@@ -11,7 +11,8 @@ llik_st = function(pars, setoftrees, impsam = F){
       else{
         l[i] = llik(b=pars,n=s$n,E=s$E,t=s$wt)*weight
       }
-    }else{
+    }
+    else{
       l[i] = llik(b=pars,n=s$n,E=s$E,t=s$wt)
     }
   }

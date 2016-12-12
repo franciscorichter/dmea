@@ -99,12 +99,12 @@ drop.fossil <- function (phy, tol = 1e-08)
 }
 
 
-num_weigh <- function(rec_tree, pars_rec, ct){
+num_weigh <- function(rec, pars_rec, ct){
   lambda0 = pars_rec[1]
   beta = pars_rec[2]
   mu = pars_rec[3]
-  L = rec_tree$L
-  wt = rec_tree$wt
+  L = rec$L
+  wt = rec$wt
   miss <- L[L[,3] != (-1),]
   miss_spe <- miss$spec
   time <- rbind(data.frame(brtimes = L[,2], E=1, spec = L[,1]),data.frame(brtimes = miss[,3], E=0, spec = miss[,1]))
@@ -124,7 +124,7 @@ num_weigh <- function(rec_tree, pars_rec, ct){
     t_ext = sub_mat$brtimes[2]-sub_mat$brtimes[1]
     P[i] = log(lambda) - sub_mat$wt[1]*sub_mat$n[1]*lambda +log(mu) - t_ext*mu-log(1-exp(-mu*(ct-sub_mat$brtimes[1])))
   }
-  prob = -sum(P)
+  prob = sum(P)
   return(prob)
 }
 

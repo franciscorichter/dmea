@@ -10,6 +10,7 @@ rec_tree <- function(wt, pars=c(0.8,0.0175,0.1), model='dd'){
   fake = FALSE
   ct = sum(wt)
   prob = 0
+  prob2 = 1
   while(i < length(wt)){
     N = n[i]
     if(model == "dd"){  # diversity-dependence model
@@ -36,10 +37,12 @@ rec_tree <- function(wt, pars=c(0.8,0.0175,0.1), model='dd'){
       cbt = cumsum(wt)[i] - cwt
     }
     t_spe = rexp(1,s)
+    prob2 = prob2*dexp(t_spe,rate=s)
     if (t_spe < cwt){
       t_ext = rexp(1,mu0) # this is not as general as trees with trait-dependance species yet,
+      prob2 = prob2*dexp(t_ext,rate=mu0)
       t_ext = cbt + t_spe + t_ext
-      prob = prob + log(1-exp(-s*cwt))
+      prob = prob*(1-exp(-s*cwt))
       if (t_ext < ct){
         up = update_tree(wt=wt,t_spe = (cbt + t_spe), t_ext = t_ext, E = E, n = n)
         if(tail(n,n=1)!= tails) print(paste('WARNING!','N'))
@@ -47,8 +50,7 @@ rec_tree <- function(wt, pars=c(0.8,0.0175,0.1), model='dd'){
         n = up$n
         wt = up$wt
         fake = FALSE
-        prob = prob + log(1-exp(-mu0*(ct-t_spe-cbt)))
-        #print(tail(up$n,n=1))
+        prob = prob*(1-exp(-mu0*(ct-t_spe-cbt)))
       }else{
         prob = prob - mu0*(ct-t_spe-cbt)
         fake = TRUE
@@ -60,14 +62,14 @@ rec_tree <- function(wt, pars=c(0.8,0.0175,0.1), model='dd'){
     }
     i = i+1
   }
-#  newick = p2phylo(wt,E,)
   L = create_L(wt,E)
-  if(max(n)>=46){
+  if(lambda0 - (lambda0-mu0)*max(n)/K <= 0){
     n_prob=0}
   else{
-    n_prob = num_weigh(rec_tree=list(wt=wt,E=E,n=n,L=L), pars_rec = pars, ct=ct)
+    n_prob = num_weigh(rec=list(wt=wt,E=E,n=n,L=L), pars_rec = pars, ct=ct)
   }
-  weight = -n_prob/prob
+  f_n = exp(-llik(b=pars,n=n,E=E,t=wt))
+  weight = f_n/prob2
   #print(weight)
-  return(list(wt=wt,E=E,n=n,weight=weight,L=L))
+  return(list(wt=wt,E=E,n=n,weight=weight,L=L,prob=prob,prob2=prob2,n_prob=n_prob,f_n=f_n))
 }
