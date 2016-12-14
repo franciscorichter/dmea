@@ -1,9 +1,7 @@
-## work in progress!!
-
 p2phylo <- function(t,n,E){
   newick = paste(sl[1],";",sep="")
   for (i in 1:length(t)){
-    nt = read.tree(newick)
+    nt = read.tree(text=newick)
     # speciation
     if (E[i] == 1){
       spec = sample(1:n[i],1)

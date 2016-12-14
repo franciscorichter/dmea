@@ -1,4 +1,3 @@
-#hacer la tabla L.
 rec_tree <- function(wt, pars=c(0.8,0.0175,0.1), model='dd'){
   lambda0 = pars[1]
   mu0 = pars[3]
@@ -9,8 +8,7 @@ rec_tree <- function(wt, pars=c(0.8,0.0175,0.1), model='dd'){
   E = rep(1,(length(wt)-1))
   fake = FALSE
   ct = sum(wt)
-  prob = 0
-  prob2 = 1
+  prob = 1
   while(i < length(wt)){
     N = n[i]
     if(model == "dd"){  # diversity-dependence model
@@ -37,39 +35,28 @@ rec_tree <- function(wt, pars=c(0.8,0.0175,0.1), model='dd'){
       cbt = cumsum(wt)[i] - cwt
     }
     t_spe = rexp(1,s)
-    prob2 = prob2*dexp(t_spe,rate=s)
+    prob = prob*dexp(t_spe,rate=s)
     if (t_spe < cwt){
       t_ext = rexp(1,mu0) # this is not as general as trees with trait-dependance species yet,
-      prob2 = prob2*dexp(t_ext,rate=mu0)
+      prob = prob*dexp(t_ext,rate=mu0)
       t_ext = cbt + t_spe + t_ext
-      prob = prob*(1-exp(-s*cwt))
       if (t_ext < ct){
         up = update_tree(wt=wt,t_spe = (cbt + t_spe), t_ext = t_ext, E = E, n = n)
-        if(tail(n,n=1)!= tails) print(paste('WARNING!','N'))
         E = up$E
         n = up$n
         wt = up$wt
         fake = FALSE
-        prob = prob*(1-exp(-mu0*(ct-t_spe-cbt)))
       }else{
-        prob = prob - mu0*(ct-t_spe-cbt)
         fake = TRUE
         i = i-1
       }
     }else{
       fake = FALSE
-      prob = prob - s*cwt
     }
     i = i+1
   }
   L = create_L(wt,E)
-  if(lambda0 - (lambda0-mu0)*max(n)/K <= 0){
-    n_prob=0}
-  else{
-    n_prob = num_weigh(rec=list(wt=wt,E=E,n=n,L=L), pars_rec = pars, ct=ct)
-  }
   f_n = exp(-llik(b=pars,n=n,E=E,t=wt))
-  weight = f_n/prob2
-  #print(weight)
-  return(list(wt=wt,E=E,n=n,weight=weight,L=L,prob=prob,prob2=prob2,n_prob=n_prob,f_n=f_n))
+  weight = f_n/prob
+  return(list(wt=wt,E=E,n=n,weight=weight,L=L,prob=prob,f_n=f_n))
 }

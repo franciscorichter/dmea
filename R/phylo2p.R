@@ -6,6 +6,6 @@ phylo2p <- function(tree){
   n = ltt[,2]
   E = diff(n)
   n = n[-length(n)]
-  E[E==-1]=0
+  E[E==-1] = 0
   return(list(t=t,E=E,n=n))
 }

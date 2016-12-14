@@ -1,4 +1,4 @@
-EM_phylo <- function(wt,init_par,n_trees=100,n_it=30,printpar=TRUE,mu=NULL,impsam=FALSE,dummy=0){
+EM_phylo <- function(wt, init_par, n_trees=100, n_it=30, printpar=TRUE, mu=NULL, impsam=FALSE, dummy=0){
   pars = init_par
   for(j in 1:n_it){
     if(printpar) print(pars)

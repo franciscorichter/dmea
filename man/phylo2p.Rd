@@ -1,19 +1,19 @@
-\name{llik}
-\alias{llik}
+\name{phylo2p}
+\alias{phylo2p}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ Likelihood function under the diversity-depencence model
+\title{Convert phylo object on a list with 3 vectors: waiting times, number of species at each node and a binary vector with  speciation/extinction identification for each node.
 %%  ~~function to do ... ~~
 }
-\description{ It computes the likelihood function of the dd model.
+\description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-llik(b,n,E,t)
+phylo2p(tree)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{b}{ vector with parameters lambda,beta and mu.
-%%     ~~Describe \code{x} here~~
+  \item{tree}{Object of class phylo
+%%     ~~Describe \code{tree} here~~
 }
 }
 \details{
@@ -42,9 +42,24 @@ llik(b,n,E,t)
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-s <- dd_sim(c(0.8,0.1,40),15)
-llik(c(0.8,0.1,40),n=s$n,s$E,s$t)
+##---- Should be DIRECTLY executable !! ----
+##-- ==>  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
+
+## The function is currently defined as
+function (tree)
+{
+    ltt = ltt.plot.coords(tree)
+    t = diff(ltt[, 1])
+    ltt = ltt[-1, ]
+    n = ltt[, 2]
+    E = diff(n)
+    n = n[-length(n)]
+    E[E == -1] = 0
+    return(list(t = t, E = E, n = n))
+  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-
+\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
+\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
