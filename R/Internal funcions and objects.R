@@ -3,7 +3,7 @@ for (i in 2:26){
   ll = paste(letters[i],letters,":0",sep="")
   sl = c(sl,ll)
 }
-
+sl=c(sl,sl)
 compphyl <- function(newi,identf,ct){
   #set to extant species to the present time
   identf[,1] = as.character(identf[,1])
@@ -16,7 +16,7 @@ compphyl <- function(newi,identf,ct){
 }
 
 # TODO: add newick output to update_tree
-# add warning message when spe or ext is begond present time
+# add warning message when spe or ext is beyond present time
 update_tree <- function(wt, t_spe, t_ext, E, n){
   #adding speciation
   ct = sum(wt)
@@ -129,16 +129,42 @@ num_weigh <- function(rec, pars_rec, ct){
 }
 
 
-sim_est <- function(n_trees, init_par=c(8,0.175,0.9),impsam=FALSE){ # simulate a tree, drop fossil, and estimate parameters back after bootstrap reconstruction
-  # seed = round(runif(1,0,10000000))  # is this silly?
+sim_est <- function(n_trees, init_par=c(8,0.175,0.9),impsam=FALSE,rec_method=1,seed=runif(1,1,100000)){ # simulate a tree, drop fossil, and estimate parameters back after bootstrap reconstruction
+  set.seed(seed)
   st = dmea::sim_phyl()
   p <- subplex(par = init_par, fn = llik,n = st$n, E = st$E, t = st$t)$par
   sit = dmea::drop.fossil(st$newick)
   sit = dmea::phylo2p(sit)
-  trees = sim_srt(wt=sit$t, pars=p, parallel = F, n_trees = n_trees)
+  trees = sim_srt(wt=sit$t, pars=p, parallel = F, n_trees = n_trees,rec_method=rec_method)
   pars = subplex(par = init_par, fn = llik_st , setoftrees = trees, impsam = impsam)$par
   return(data.frame(real=p, est=pars))
 }
 
 
+number_missing <- function(st){
+  total = length(st$t)
+  drop = drop.fossil(st$newick)
+  drop = phylo2p(drop)
+  extant = length(drop$t)
+  missing = (total - extant)/2
+  return(missing)
+}
 
+
+create_L <- function(t,E){
+  L = data.frame(spec='aa', spec_time=0, ext_time=-1)
+  bt = cumsum(t)
+  for(i in 1:(length(t)-1)){
+    if(E[i] == 1){
+      L = rbind(L,data.frame(spec=substr(sl[i+1],1,2), spec_time=bt[i], ext_time = -1))
+    }
+    if(E[i] == 0){
+      set = L[L$ext_time == (-1),]
+      ext_spec = sample(set$spec,1) # diversity-dependence
+      #print(ext_spec)
+      #print(L)
+      L[L$spec == ext_spec , 3] = bt[i]
+    }
+  }
+  return(L)
+}

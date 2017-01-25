@@ -5,7 +5,7 @@ llik_st = function(pars, setoftrees, impsam = F){
     s = setoftrees[[i]]
     if(impsam){
       weight = s$weight
-      if(weight==0){
+      if(weight == 0){
         l[i] = 0
       }
       else{

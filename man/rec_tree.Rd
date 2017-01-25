@@ -1,5 +1,5 @@
-\name{reconst_tree}
-\alias{reconst_tree}
+\name{rec_tree}
+\alias{rec_tree}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Reconstructed phylogenetic tree
 %%  ~~function to do ... ~~
