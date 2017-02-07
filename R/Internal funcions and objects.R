@@ -128,7 +128,6 @@ num_weigh <- function(rec, pars_rec, ct){
   return(prob)
 }
 
-
 sim_est <- function(n_trees, init_par=c(8,0.175,0.9),impsam=FALSE,rec_method=1,seed=runif(1,1,100000)){ # simulate a tree, drop fossil, and estimate parameters back after bootstrap reconstruction
   set.seed(seed)
   st = dmea::sim_phyl()
@@ -140,7 +139,6 @@ sim_est <- function(n_trees, init_par=c(8,0.175,0.9),impsam=FALSE,rec_method=1,s
   return(data.frame(real=p, est=pars))
 }
 
-
 number_missing <- function(st){
   total = length(st$t)
   drop = drop.fossil(st$newick)
@@ -149,7 +147,6 @@ number_missing <- function(st){
   missing = (total - extant)/2
   return(missing)
 }
-
 
 create_L <- function(t,E){
   L = data.frame(spec='aa', spec_time=0, ext_time=-1)
@@ -161,10 +158,21 @@ create_L <- function(t,E){
     if(E[i] == 0){
       set = L[L$ext_time == (-1),]
       ext_spec = sample(set$spec,1) # diversity-dependence
-      #print(ext_spec)
-      #print(L)
       L[L$spec == ext_spec , 3] = bt[i]
     }
   }
   return(L)
+}
+
+
+get_g <- function(wt,wt_obs){
+  Sp = split(cumsum(wt), findInterval(cumsum(wt), cumsum(wt_obs), left.open = TRUE))
+  for (i in 1:length(Sp)){
+
+  }
+}
+
+convol <-function(wt,lambda,mu,remt){
+  out = 1-exp(-lambda*wt)-lambda*exp(-mu*remt)/(mu-lambda)*(exp(wt*(mu-lambda))-1)
+  return(out)
 }
