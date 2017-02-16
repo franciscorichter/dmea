@@ -5,9 +5,11 @@ EM_phylo <- function(wt, init_par, n_trees=100, n_it=30, printpar=TRUE, mu=0.1, 
   x1=c(0,2,1)
   x2=c(20,2,1)
   i=1
+  q = c(0,0,0)
   while(dist(rbind(x1, x2))>tol){
-    #print(paste('iteration #',i))
-    if(printpar) print(pars)
+    print(paste('iteration #',i,':'))
+    if(printpar) print(c(pars,(pars[1]-pars[3])/pars[2]))
+    #,'are parameters on iteration',i,'and took',q[3],'segs'))
     x1 = pars
     p = proc.time()
     trees <- sim_srt(wt=wt, pars=pars, parallel=parallel, n_trees=n_trees)
@@ -16,8 +18,9 @@ EM_phylo <- function(wt, init_par, n_trees=100, n_it=30, printpar=TRUE, mu=0.1, 
       x2 = pars
       #Pars[j,] = pars
       #El[j] = p
-      q=proc.time()-p
-      print(paste('iteration',i,'took',q[3],'seg'))
+      qt=proc.time()-p
+      q[i] = qt[3]
+      #print(paste('iteration',i,'took',q[3],'seg'))
       i=i+1
     }
     else{
@@ -27,7 +30,7 @@ EM_phylo <- function(wt, init_par, n_trees=100, n_it=30, printpar=TRUE, mu=0.1, 
     }
     pars[3]=pars[3]+dummy
   }
-  return(list(pars=pars))
+  return(list(pars=c(pars,(pars[1]-pars[3])/pars[2]),time=sum(q),n_it=i))
 }
 
 
