@@ -1,0 +1,13 @@
+.travis.yml
+^.*\.Rproj$
+^\.Rproj\.user$
+^data-raw$
+CONDUCT.md
+CONTRIBUTING.md
+build_site.R
+todo.R
+.github/
+inst/examples/flexdashboard
+Untitled*
+rsconnect/
+revdep/

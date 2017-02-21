@@ -5,7 +5,7 @@ phylo2p <- function(tree){
   ltt = ltt[-1,]
   n = ltt[,2]
   E = diff(n)
-  n = n[-length(n)]
+  #n = n[-length(n)]
   E[E==-1] = 0
-  return(list(t=t,E=E,n=n))
+  return(list(wt=t,E=E,n=n))
 }

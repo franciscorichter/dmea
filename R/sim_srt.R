@@ -16,12 +16,12 @@ sim_srt <- function(wt, pars, parallel=F, n_trees,rec_method=1, mu=0.1){    # si
       trees[[i]] = rec
     }
   }
-  w=0
-  for(i in 1:n_trees){
-    w[i]=trees[[i]]$weight
-  }
-  for(i in 1:n_trees){
-    trees[[i]]$weight = w[i]/max(w)
-  }
+  # w=0
+  # for(i in 1:n_trees){
+  #   w[i]=trees[[i]]$weight
+  # }
+  # for(i in 1:n_trees){
+  #   trees[[i]]$weight = w[i]/max(w)
+  # }
   return(trees)
 }

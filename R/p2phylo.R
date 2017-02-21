@@ -31,6 +31,6 @@ p2phylo <- function(p){
     }
   }
   newick = compphyl(newi=newick,identf=identf,ct=ct)
-  a=1
+  newick = read.tree(text=newick)
   return(newick)
 }
