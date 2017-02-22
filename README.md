@@ -4,28 +4,9 @@ This package consists on a set of tools for Diversification process analysis.
 
 ### Instalation. 
 
-For instalation please 
+For instalation:
 
- 1. download the .zip file and save the containing folder. 
- 2. open 'dmea.Rproj' with Rstudio
- 3. Run the code below to be sure you have all dependences needed 
- 
- ```{r}
- ipak <- function(pkg){
-  new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
-  if (length(new.pkg))
-    install.packages(new.pkg, dependencies = TRUE)
-  sapply(pkg, require, character.only = TRUE)
-}
-
-# usage
-packages <- c("ape","subplex","latex2exp","gridExtra","foreach","doParallel")
-ipak(packages)
-```
- 4. under build menu, click on build and reload
- 5. you should have the dmea package on your library now, type ```library('dmea')``` to check it.
- 
- 
+devtools::install_github("franciscorichter/dmea")
  
  
 ### Some travis check (not using yet)

@@ -15,7 +15,6 @@ compphyl <- function(newi,identf,ct){
   return(newi)
 }
 
-# TODO: add newick output to update_tree
 # add warning message when spe or ext is beyond present time
 update_tree <- function(wt, t_spe, t_ext, E, n){
   #adding speciation
@@ -98,7 +97,7 @@ drop.fossil <- function (phy, tol = 1e-08)
   drop.tip(phy,root.edge = T ,which(x < max(x) - tol))
 }
 
-
+# obsolete?
 num_weigh <- function(rec, pars_rec, ct){
   lambda0 = pars_rec[1]
   beta = pars_rec[2]
@@ -164,7 +163,7 @@ create_L <- function(t,E){
   return(L)
 }
 
-
+# obsolete?
 get_g <- function(wt,wt_obs){
   Sp = split(cumsum(wt), findInterval(cumsum(wt), cumsum(wt_obs), left.open = TRUE))
   for (i in 1:length(Sp)){
@@ -175,4 +174,17 @@ get_g <- function(wt,wt_obs){
 convol <-function(wt,lambda,mu,remt){
   out = 1-exp(-lambda*wt)-lambda*exp(-mu*remt)/(mu-lambda)*(exp(wt*(mu-lambda))-1)
   return(out)
+}
+
+
+# Work in progress!!
+get_comb_ltt <- function(phylo1,phylo2){
+  ltt1 = ltt.plot.coords(phylo1)[-1,]
+  ltt2 = ltt.plot.coords(phylo2)[-1,]
+  i = j = 1
+  N1 = dim(ltt1)[1]
+  N2 = dim(ltt2)[1]
+  while(i <= N1 | j<=N2 ){
+
+  }
 }
