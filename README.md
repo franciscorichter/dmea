@@ -2,10 +2,16 @@
 
 This package consists on a set of tools for Diversification process analysis. 
 
-### Instalation. 
+### Installation. 
 
+<<<<<<< HEAD
+=======
+To install `dmea`, do the following command from within R:
+
+```
+>>>>>>> 7d8dc1b87d250ed31e5907a8a588f07150543ec3
 devtools::install_github("franciscorichter/dmea")
- 
+```
  
 ### Some travis check (not using yet)
  
