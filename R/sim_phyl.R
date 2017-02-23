@@ -1,7 +1,7 @@
 ### Phylogenetic tree simulation
-sim_phyl <- function(ct=15, lambda0=0.8, mu0=0.1, K=40, model="dd", printEv=FALSE, seed=F, seed_val=NULL){
+sim_phyl <- function(ct=15, lambda0=0.8, mu0=0.1, K=40, model="dd", printEv=FALSE, seed=0){
   ## Set up
-  if(seed) {set.seed(seed_val)}
+  if(seed>0) {set.seed(seed)}
   i = 1
   N = 1 # Starting number of species
   Tm = NULL # Waiting times
@@ -75,5 +75,5 @@ sim_phyl <- function(ct=15, lambda0=0.8, mu0=0.1, K=40, model="dd", printEv=FALS
   newick = read.tree(text=newick)
   Tm[i] = ct-sum(Tm)
   n[i] = n[i-1] + E[i-1] - (1-E[i-1])
-  return(list(t=Tm, E=E, n=n, newick=newick, br = cumsum(Tm), newi = newi, L=L))
+  return(list(wt=Tm, E=E, n=n, newick=newick, br = cumsum(Tm), newi = newi, L=L))
 }

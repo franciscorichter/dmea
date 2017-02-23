@@ -4,8 +4,6 @@ This package consists on a set of tools for Diversification process analysis.
 
 ### Instalation. 
 
-For instalation:
-
 devtools::install_github("franciscorichter/dmea")
  
  

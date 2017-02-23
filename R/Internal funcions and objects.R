@@ -177,14 +177,37 @@ convol <-function(wt,lambda,mu,remt){
 }
 
 
-# Work in progress!!
+
 get_comb_ltt <- function(phylo1,phylo2){
-  ltt1 = ltt.plot.coords(phylo1)[-1,]
-  ltt2 = ltt.plot.coords(phylo2)[-1,]
+  t1 = data.frame(ltt.plot.coords(phylo1))[1,1]
+  t2 = data.frame(ltt.plot.coords(phylo2))[1,1]
+  if(round(t1) != round(t2)){print('DIFFERENT LENGHT IN PHYLOGENIES!')}
+  ltt1 = data.frame(ltt.plot.coords(phylo1)[-1,])
+  ltt2 = data.frame(ltt.plot.coords(phylo2)[-1,])
   i = j = 1
   N1 = dim(ltt1)[1]
   N2 = dim(ltt2)[1]
-  while(i <= N1 | j<=N2 ){
-
+  comb_ltt = data.frame(time=NULL,n1=NULL,n2=NULL)
+  while(i <= N1 | j <= N2 ){
+    check = T
+    if(ltt1$time[i] < ltt2$time[j]){
+      comb_ltt = rbind(comb_ltt,data.frame(time=ltt1$time[i]-t1,n1=ltt1$N[i],n2=ltt2$N[j]))
+      t1 = ltt1$time[i]
+      i = i+1
+      check = F
+    }
+    if(ltt1$time[i] > ltt2$time[j] & check){
+      comb_ltt = rbind(comb_ltt,data.frame(time=ltt2$time[j]-t1,n1=ltt1$N[i],n2=ltt2$N[j]))
+      t1 = ltt2$time[j]
+      j=j+1
+      check = F
+    }
+    if(ltt1$time[i] == ltt2$time[j] & check){
+      comb_ltt = rbind(comb_ltt,data.frame(time=ltt2$time[j]-t1,n1=ltt1$N[i],n2=ltt2$N[j]))
+      t1 = ltt2$time[j]
+      j=j+1
+      i=i+1
+    }
   }
+  return(comb_ltt)
 }

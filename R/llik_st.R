@@ -3,11 +3,11 @@ llik_st = function(pars, setoftrees, impsam = F, mu=0.1){
     pars[3] = mu
   }
   m = length(setoftrees)
-  l = NULL
+  l = NULL # this should be changed
   for(i in 1:m){
     s = setoftrees[[i]]
     if(impsam){
-      weight = s$weight
+      weight = exp(s$weight)
       if(weight == 0){
         l[i] = 0
       }
