@@ -1,58 +1,46 @@
-# WORK IN PROGRESS
-
-cond_exp_ltt <- function(obsPhylo,pars){
+cond_exp_ltt <- function(obsPhylo,pars, ct=15){
   # get branching times of obsPhylo
   p = phylo2p(obsPhylo)
   # get expected ltt with pars
   exp = expectedLTT(pars=pars)
   # aproax expected ltt to branchingtimes
   grid = cumsum(p$wt)
-  nn = approx(exp$t,exp$E,xou=grid)$y
+  n_exp = approx(exp$t, exp$Ex, xou=grid)$y
+  #tt = approx(exp$Ex, exp$t, xou=1:45)$y
+  n_exp = round(n_exp) # it may be better without round  (?)
+  #Ex = expectedLTT(pars = pars, ct = ct)$E  # approximate is too expensive :( ...
   #added = 0
-  N = 1
   j = 1
-  wt=E=n=0
-  for(i in 1:length(nn)){
-    lambda = pars[1]-((pars[1]-pars[2])/pars[3])*N
-    suml = N*lambda
-    exp_spec_time = 1/suml
-    mu = pars[2]
-   # summ = (max(0,N-p$n[i]))*mu
-    exp_ext_time = 1/mu
- #   if(exp_ext_time==0) exp_ext_time=999999  # this means that there is not possible extinction
+  wt = p$wt
+  E = p$E
+  obs_n = p$n
+  n = p$n
+  N = 1
+  #i = 1
+  cbt=0
+  for(i in 1:length(wt)){
     cwt = p$wt[i]
-    while(nn[i] > N & exp_spec_time < cwt){
-      wt[j] = exp_spec_time
-      n[j] = N
-      E[j] = 1
-      j = j + 1
-      cwt = cwt - exp_spec_time
-      N = N+1
-      lambda = pars[1]-((pars[1]-pars[2])/pars[3])*N
-      suml = N*lambda
-      et[k] =
-#      exp_spec_time = 1/suml
-#      summ = (max(0,N-p$n[i]))*mu
-#      exp_ext_time = 1/summ
-#      if(exp_ext_time==0) exp_ext_time=999999  # this means that there is not possible extinction
+    if(i>1) cbt = grid[i-1]
+    next_n = obs_n[i] + 1
+    miss = n_exp[i] - next_n
+    N = obs_n[i]
+    if(miss>0){
+      for(j in 1:miss){
+        lambda = pars[1]-((pars[1]-pars[2])/pars[3])*N
+        suml = N*lambda
+        t_spe = rtexp(1,suml,cwt)  # there is a more proper way to do this (?)
+        t_ext = rtexp(1, pars[2], ct-(cbt + t_spe))
+        up = update_tree(wt = wt, t_spe = (cbt + t_spe), t_ext = (cbt + t_spe)+t_ext, E = E, n = n)
+        wt = up$wt
+        n = up$n
+        E = up$E
+        obs_n[grid > (cbt + t_spe) & grid < (cbt + t_ext)] = obs_n[grid > (cbt + t_spe) & grid < (cbt + t_ext)] + 1
+        cwt = cwt - t_spe
+        cbt = cbt + t_spe
+        N = N+1 # this is not exact
+      }
     }
-    while(nn[i] < N & exp_ext_time < cwt){
-      wt[j] = exp_ext_time
-      n[j] = N
-      E[j] = 0
-      j = j = 1
-      cwt = cwt - exp_ext_time
-      N = N-1
-      summ = (max(0,N-p$n[i]))*mu
-      exp_ext_time = 1/summ
-      if(exp_ext_time==0) exp_ext_time=999999  # this means that there is not possible extinction
-    }
-    wt[j] = cwt
-    E[j] = 1
-    n[j] = N
-    N = N + 1
-    j = j+1
   }
-  newp = list(wt = wt, n = n, E= E)
-  return(newp)
+  return(list(wt=wt,n=n,E=E))
 }
+
