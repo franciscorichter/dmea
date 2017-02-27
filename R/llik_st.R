@@ -12,11 +12,11 @@ llik_st = function(pars, setoftrees, impsam = F, mu=0.1){
         l[i] = 0
       }
       else{
-        l[i] = llik(b=pars,n=s$n,E=s$E,t=s$wt)*weight
+        l[i] = llik(pars=pars,n=s$n,E=s$E,t=s$wt)*weight
       }
     }
     else{
-      l[i] = llik(b=pars,n=s$n,E=s$E,t=s$wt)
+      l[i] = llik(pars=pars,n=s$n,E=s$E,t=s$wt)
     }
   }
   L = sum(l)
