@@ -1,5 +1,6 @@
 #TODO: create the general one
-llik = function(b,n,E,t){
+llik = function(pars,n,E,t){
+  b = c(pars[1],(pars[1]-pars[2])/pars[3],pars[2])
   t=t[1:(length(t)-1)]
   n = n[1:(length(n)-1)]
   sigma = n*(b[1]-b[2]*n + b[3]) #n-dimentional

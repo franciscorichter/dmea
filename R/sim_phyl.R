@@ -65,6 +65,7 @@ sim_phyl <- function(ct=15, lambda0=0.8, mu0=0.1, K=40, model="dd", printEv=FALS
       n = NULL # vector with number of species at time t_i
       newick = paste(sl[1],";",sep="")  # Newick tree
       identf = data.frame(Spec="aa",Time=0)
+      L = data.frame(spec='aa', spec_time=0, ext_time=-1, parent = '00')
     }else { # Otherwise, update values and go to next iteration
       Tm[i] = tm
       i<-i+1

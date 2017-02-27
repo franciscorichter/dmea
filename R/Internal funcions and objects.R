@@ -16,9 +16,9 @@ compphyl <- function(newi,identf,ct){
 }
 
 # add warning message when spe or ext is beyond present time
-update_tree <- function(wt, t_spe, t_ext, E, n){
+update_tree <- function(wt, t_spe, t_ext, E, n, ct){
   #adding speciation
-  ct = sum(wt)
+  #ct = sum(wt)
   k = length(wt[cumsum(wt)<t_spe])
    if(k<length(E)){
      lastbitE = E[(k+1):length(E)]
@@ -40,6 +40,7 @@ update_tree <- function(wt, t_spe, t_ext, E, n){
     lastbitN = c(n[k+1],n[(k+1):length(n)]-1)
     lastbitt = wt[(k+2):length(wt)]
   }else{
+    ## THIS IS NOT WORKING!!
     lastbitE = NULL
     lastbitN = c(n[k+1],n[(k+1):length(n)]-1)#n[k]-1
     lastbitt = NULL

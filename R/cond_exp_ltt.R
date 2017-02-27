@@ -1,22 +1,20 @@
-cond_exp_ltt <- function(obsPhylo,pars, ct=15){
+cond_exp_ltt <- function(obsPhylo,pars, ct=15,n_it=100){
   # get branching times of obsPhylo
   p = phylo2p(obsPhylo)
   # get expected ltt with pars
-  exp = expectedLTT(pars=pars)
-  # aproax expected ltt to branchingtimes
   grid = cumsum(p$wt)
-  n_exp = approx(exp$t, exp$Ex, xou=grid)$y
+  n_exp = expectedLTT(pars=pars, grid=grid,n_it = 100)
+  # aproax expected ltt to branchingtimes
+#  n_exp = approx(exp$t, exp$Ex, xou=grid, rule = 2)$y
   #tt = approx(exp$Ex, exp$t, xou=1:45)$y
-  n_exp = round(n_exp) # it may be better without round  (?)
+  n_exp = round(n_exp[,2]) # it may be better without round  (?)
   #Ex = expectedLTT(pars = pars, ct = ct)$E  # approximate is too expensive :( ...
   #added = 0
-  j = 1
   wt = p$wt
   E = p$E
   obs_n = p$n
   n = p$n
   N = 1
-  #i = 1
   cbt=0
   for(i in 1:length(wt)){
     cwt = p$wt[i]
