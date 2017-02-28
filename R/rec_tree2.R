@@ -45,7 +45,7 @@ rec_tree2 <- function(wt, pars=c(0.8,0.0175,0.1), model='dd'){
     i = i+1
   }
   L = create_L(wt,E)
-  f_n = exp(-llik(b=pars,n=n,E=E,t=wt))
+  f_n = exp(-llik(pars=pars,n=n,E=E,t=wt))
   weight = f_n/prob
   return(list(wt=wt,E=E,n=n,weight=weight,L=L,prob=prob,f_n=f_n))
 }
