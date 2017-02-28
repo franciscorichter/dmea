@@ -39,7 +39,8 @@ rec_tree1 <- function(wt, pars=c(0.8,0.0175,0.1), model='dd', v2=F){
       t_ext = rexp(1,mu0)
       t_ext = cbt + t_spe + t_ext
       if (t_ext < ct){
-        up = update_tree(wt=wt,t_spe = (cbt + t_spe), t_ext = t_ext, E = E, n = n)
+        p = list(wt=wt,E=E,n=n)
+        up = update_tree(p,t_spe = (cbt + t_spe), t_ext = t_ext)
         E = up$E
         n = up$n
         wt = up$wt

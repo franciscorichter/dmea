@@ -15,43 +15,6 @@ compphyl <- function(newi,identf,ct){
   return(newi)
 }
 
-# add warning message when spe or ext is beyond present time
-update_tree <- function(wt, t_spe, t_ext, E, n, ct){
-  #adding speciation
-  #ct = sum(wt)
-  k = length(wt[cumsum(wt)<t_spe])
-   if(k<length(E)){
-     lastbitE = E[(k+1):length(E)]
-     lastbitN = c(n[k+1],n[(k+1):length(n)]+1)
-     lastbitt = wt[(k+2):length(wt)]
-   }else{
-     lastbitE = NULL
-     lastbitN = c(n[k+1],n[k+1]+1)#n[k]+1
-     lastbitt = NULL
-   }
-  wt = c(wt[0:k], t_spe-sum(wt[0:k]), wt[k+1]-(t_spe-sum(wt[0:k])), lastbitt)
-  E = c(E[0:k],1,lastbitE)
-  n = c(n[0:k],lastbitN)
-  #adding extinction
-  k = length(wt[cumsum(wt)<t_ext])
-  #print(k)
-  if(k<length(E)){
-    lastbitE = E[(k+1):length(E)]
-    lastbitN = c(n[k+1],n[(k+1):length(n)]-1)
-    lastbitt = wt[(k+2):length(wt)]
-  }else{
-    ## THIS IS NOT WORKING!!
-    lastbitE = NULL
-    lastbitN = c(n[k+1],n[(k+1):length(n)]-1)#n[k]-1
-    lastbitt = NULL
-  }
-  E = c(E[0:k],0,lastbitE)
-  n = c(n[0:k],lastbitN)
-  wt = c(wt[0:k], t_ext-sum(wt[0:k]), wt[k+1]-(t_ext-sum(wt[0:k])), lastbitt)
-  #print(n)
-  return(list(wt=wt,E=E,n=n))
-}
-
 
 
 ###
@@ -93,9 +56,18 @@ par_est_vis <- function(P,par,PR){
 
 drop.fossil <- function (phy, tol = 1e-08)
 {
+  p = phylo2p(phy)
+  ct = sum(p$wt)
   n <- Ntip(phy)
   x <- dist.nodes(phy)[n + 1, ][1:n]
-  drop.tip(phy,root.edge = T ,which(x < max(x) - tol))
+  dphy = drop.tip(phy, root.edge = T , which(x < max(x) - tol))
+  p2 = phylo2p(dphy)
+  if(sum(p2$wt) != ct){
+    rem_time = ct - sum(p2$wt)
+    p2$wt[1] = p2$wt[1] + rem_time
+    dphy = p2phylo(p2)
+  }
+  return(dphy)
 }
 
 # obsolete?
