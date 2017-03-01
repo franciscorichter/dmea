@@ -29,11 +29,11 @@ par_est_vis <- function(P,par,PR){
     parname = 'lambda'
   }
   if (par==2){
-    int= 0.0175
+    int= 0.1
     parname = 'beta'
   }
   if (par == 3){
-    int = 0.1
+    int = 40
     parname = 'mu'
   }
   if (par ==4){
@@ -100,8 +100,8 @@ num_weigh <- function(rec, pars_rec, ct){
   return(prob)
 }
 
-sim_est <- function(n_trees, init_par=c(8,0.175,0.9),impsam=FALSE,rec_method=1,seed=runif(1,1,100000)){ # simulate a tree, drop fossil, and estimate parameters back after bootstrap reconstruction
-  set.seed(seed)
+sim_est <- function(n_trees, init_par=c(1.8,0.175,60),impsam=FALSE,rec_method=1,seed=0){ # simulate a tree, drop fossil, and estimate parameters back after bootstrap reconstruction
+  if (seed != 0) set.seed(seed)
   st = dmea::sim_phyl()
   p <- subplex(par = init_par, fn = llik,n = st$n, E = st$E, t = st$wt)$par
   sit = dmea::drop.fossil(st$newick)
