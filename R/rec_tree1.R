@@ -1,7 +1,7 @@
-rec_tree1 <- function(wt, pars=c(0.8,0.0175,0.1), model='dd', v2=F){
+rec_tree1 <- function(wt, pars, model='dd', v2=F){
   lambda0 = pars[1]
-  mu0 = pars[3]
-  K = (lambda0-mu0)/pars[2]
+  mu0 = pars[2]
+  K = pars[3]
   n = 1:length(wt)
   i = 1
   tails = tail(n,n=1)

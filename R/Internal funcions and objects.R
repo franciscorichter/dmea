@@ -30,11 +30,16 @@ par_est_vis <- function(P,par,PR){
   }
   if (par==2){
     int= 0.1
-    parname = 'beta'
+    parname = 'mu'
   }
   if (par == 3){
     int = 40
-    parname = 'mu'
+    parname = 'K'
+    n = dim(P)[1]
+    P = P[P[,3]<100 & PR[,3]<100,]
+    PR = PR[P[,3]<100 & PR[,3]<100,]
+    n2 = dim(P)[1]
+    print(paste(1-n2/n,'proportion of data was excluded for vizualization purposes'))
   }
   if (par ==4){
     int = 40
