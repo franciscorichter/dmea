@@ -36,8 +36,9 @@ par_est_vis <- function(P,par,PR){
     int = 40
     parname = 'K'
     n = dim(P)[1]
-    P = P[P[,3]<100 & PR[,3]<100,]
+    P1 = P[P[,3]<100 & PR[,3]<100,]
     PR = PR[P[,3]<100 & PR[,3]<100,]
+    P = P1
     n2 = dim(P)[1]
     print(paste(1-n2/n,'proportion of data was excluded for vizualization purposes'))
   }
