@@ -127,6 +127,7 @@ number_missing <- function(st){
 }
 
 create_L <- function(t,E){
+  ## THIS FUNCTION HAS A BUG WHEN THE LENGTH OF T IS SO HIGH
   L = data.frame(spec='aa', spec_time=0, ext_time=-1)
   bt = cumsum(t)
   for(i in 1:(length(t)-1)){

@@ -59,7 +59,9 @@ rec_tree1 <- function(wt, pars, model='dd', v2=F){
     }
     i = i+1
   }
-  L = create_L(wt,E)
+  L = 0
+  # this function has a bug needed to be repared
+#  L = create_L(wt,E)
   f_n = -llik(pars=pars,n=n,E=E,t=wt)
   logweight = f_n-sum(prob)
   return(list(wt=wt,E=E,n=n,weight=logweight,L=L,g=prob,f_n=f_n))
