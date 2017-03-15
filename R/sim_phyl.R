@@ -76,5 +76,7 @@ sim_phyl <- function(ct=15, lambda0=0.8, mu0=0.1, K=40, model="dd", printEv=FALS
   newick = read.tree(text=newick)
   Tm[i] = ct-sum(Tm)
   n[i] = n[i-1] + E[i-1] - (1-E[i-1])
-  return(list(wt=Tm, E=E, n=n, newick=newick, br = cumsum(Tm), newi = newi, L=L))
+  newick.extant = drop.fossil(newick)
+  newick.extant.p = phylo2p(newick.extant)
+  return(list(wt=Tm, E=E, n=n, newick=newick, br = cumsum(Tm), newick.extant = newick.extant, newick.extant.p = newick.extant.p, L=L))
 }

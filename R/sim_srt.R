@@ -1,6 +1,7 @@
 sim_srt <- function(wt, pars, parallel=F, n_trees,rec_method=1, mu=0.1){    # simulate set of reconstructed trees
   if(length(pars)==2){
-    pars[3]=mu
+    pars[3] = pars[2]
+    pars[2] = mu
   }
   if(parallel){
     no_cores <- detectCores()- 1

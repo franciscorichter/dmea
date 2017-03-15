@@ -168,7 +168,7 @@ get_comb_ltt <- function(phylo1,phylo2){
   N1 = dim(ltt1)[1]
   N2 = dim(ltt2)[1]
   comb_ltt = data.frame(time=NULL,n1=NULL,n2=NULL)
-  while(i <= N1 | j <= N2 ){
+  while(i <= N1 & j <= N2 ){
     check = T
     if(ltt1$time[i] < ltt2$time[j]){
       comb_ltt = rbind(comb_ltt,data.frame(time=ltt1$time[i]-t1,n1=ltt1$N[i],n2=ltt2$N[j]))
@@ -191,3 +191,22 @@ get_comb_ltt <- function(phylo1,phylo2){
   }
   return(comb_ltt)
 }
+
+
+ltt_mu <- function(mu,phylo,n_trees=10){
+  #Ltt2 = data.frame(t=cumsum(wt), Ex = n, mu=999)
+  lambda_K = subplex(par =c(2,60), fn = llik_st , setoftrees = trees, mu = mu, impsam = FALSE)$par
+  pars = c(lambda_K[1],mu,lambda_K[2])
+  expe = expectedLTT2(pars,n_it=n_trees)
+  #ltt2 = data.frame(t = cumsum(expe$t), Ex = expe$Ex, mu=mu)
+  #Ltt2 = rbind(Ltt2,ltt2)
+  #}
+  p = list(wt=expe$t,E=rep(1,length(expe$t)),n=expe$Ex)
+  #Ltt2$mu = as.factor(Ltt2$mu)
+  phylo2 = p2phylo(p)
+  ltt = ltt_stat(phylo,phylo2)
+  return(ltt)
+}
+
+
+

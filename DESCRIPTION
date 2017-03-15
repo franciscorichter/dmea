@@ -15,4 +15,7 @@ Depends:
     gridExtra,
     foreach,
     doParallel,
-    nLTT
+    nLTT,
+    matrixStats
+
+
