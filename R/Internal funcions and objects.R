@@ -193,8 +193,9 @@ get_comb_ltt <- function(phylo1,phylo2){
 }
 
 
-ltt_mu <- function(mu,phylo,n_trees=10){
-  #Ltt2 = data.frame(t=cumsum(wt), Ex = n, mu=999)
+ltt_mu <- function(mu,phylo,prior_pars,n_trees=10){
+  po = phylo2p(phylo)
+  trees = sim_srt(wt=po$wt,pars = prior_pars,n_trees = n_trees,mu = mu)
   lambda_K = subplex(par =c(2,60), fn = llik_st , setoftrees = trees, mu = mu, impsam = FALSE)$par
   pars = c(lambda_K[1],mu,lambda_K[2])
   expe = expectedLTT2(pars,n_it=n_trees)
