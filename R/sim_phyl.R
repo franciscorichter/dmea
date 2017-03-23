@@ -2,6 +2,11 @@
 sim_phyl <- function(ct=15, lambda0=0.8, mu0=0.1, K=40, model="dd", printEv=FALSE, seed=0){
   ## Set up
   if(seed>0) {set.seed(seed)}
+  ###
+  key=0
+  reboot2=0
+  while(key==0){
+  ###
   i = 1
   N = 1 # Starting number of species
   Tm = NULL # Waiting times
@@ -12,7 +17,7 @@ sim_phyl <- function(ct=15, lambda0=0.8, mu0=0.1, K=40, model="dd", printEv=FALS
   newick = paste(sl[1],";",sep="")  # Newick tree
   identf = data.frame(Spec="aa",Time=0) # Labels of species
   L = data.frame(spec='aa', spec_time=0, ext_time=-1, parent = '00')
-  while (sumt<ct){
+  while (sumt < ct){
     if(model == "dd"){  # diversity-dependence model
       lambda = max(0,lambda0 - (lambda0-mu0)*N/K)
       mu = mu0
@@ -74,9 +79,22 @@ sim_phyl <- function(ct=15, lambda0=0.8, mu0=0.1, K=40, model="dd", printEv=FALS
   newick = compphyl(newi=newick,identf=identf,ct=ct)
   newi = newick
   newick = read.tree(text=newick)
+  #####
+  phy = newick
+  n <- Ntip(phy)
+  x <- dist.nodes(phy)[n + 1, ][1:n]
+  tol = 1e-08
+  dphy = drop.tip(phy, root.edge = T , which(x < max(x) - tol))
+  if(Ntip(dphy)>2){
+    key=1
+  }else{
+    reboot2=reboot2+reboot+1
+  }
+  }
+  ####
   Tm[i] = ct-sum(Tm)
   n[i] = n[i-1] + E[i-1] - (1-E[i-1])
   newick.extant = drop.fossil(newick)
   newick.extant.p = phylo2p(newick.extant)
-  return(list(wt=Tm, E=E, n=n, newick=newick, br = cumsum(Tm), newick.extant = newick.extant, newick.extant.p = newick.extant.p, L=L))
+  return(list(wt=Tm, E=E, n=n, newick=newick, br = cumsum(Tm), newick.extant = newick.extant, newick.extant.p = newick.extant.p, L=L, r=reboot2))
 }

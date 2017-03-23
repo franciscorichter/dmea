@@ -6,29 +6,23 @@ EM_phylo <- function(wt, init_par, n_trees=10, n_it=30, printpar=TRUE, mu=0.1, i
   x2=c(20,2,1)
   i=1
   q = c(0,0,0)
-  while(dist(rbind(x1, x2)) > tol & i < 30){
+  ltt = NULL
+  i=1
+  while(i <= n_it){ #dist(rbind(x1, x2)) > tol &
     print(paste('iteration #',i,':'))
     if(printpar) print(pars)
     #,'are parameters on iteration',i,'and took',q[3],'segs'))
     x1 = pars
     p = proc.time()
-    trees <- sim_srt(wt=wt, pars=pars, parallel=parallel, n_trees=n_trees)
-    #if(length(init_par)==3){
-      pars = subplex(par = pars, fn = llik_st, setoftrees = trees, impsam = impsam)$par
-      x2 = pars
-      Pars[i,] = pars
-      #El[j] = p
-      qt=proc.time()-p
-      q[i] = qt[3]
-      #print(paste('iteration',i,'took',q[3],'seg'))
-      i=i+1
-    #}
- #   else{
-  #    pars = c(subplex(par = c(8,0.175),fn = llik_st ,mu=mu , setoftrees = trees, impsam = impsam)$par,mu)
-   #   x2 = pars
-  #  }
+    trees <- sim_srt(wt=wt, pars=pars, n_trees=n_trees)
+    pars = subplex(par = pars, fn = llik_st, setoftrees = trees, impsam = impsam)$par
+    x2 = pars
+    Pars[i,] = pars
+    qt=proc.time()-p
+    q[i] = qt[3]
+    i=i+1
   }
-  return(Pars)
+  return(list(pars=Pars))
 }
 
 

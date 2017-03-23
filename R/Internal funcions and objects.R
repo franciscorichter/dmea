@@ -3,7 +3,12 @@ for (i in 2:26){
   ll = paste(letters[i],letters,":0",sep="")
   sl = c(sl,ll)
 }
-sl=c(sl,sl)
+SL = paste(LETTERS[1],LETTERS,":0",sep="")
+for (i in 2:26){
+  ll = paste(LETTERS[i],LETTERS,":0",sep="")
+  SL = c(SL,ll)
+}
+sl=c(sl,SL)
 compphyl <- function(newi,identf,ct){
   #set to extant species to the present time
   identf[,1] = as.character(identf[,1])
@@ -199,10 +204,8 @@ ltt_mu <- function(mu,phylo,prior_pars,n_trees=10){
   lambda_K = subplex(par =c(2,60), fn = llik_st , setoftrees = trees, mu = mu, impsam = FALSE)$par
   pars = c(lambda_K[1],mu,lambda_K[2])
   expe = expectedLTT2(pars,n_it=n_trees)
-  #ltt2 = data.frame(t = cumsum(expe$t), Ex = expe$Ex, mu=mu)
-  #Ltt2 = rbind(Ltt2,ltt2)
-  #}
-  p = list(wt=expe$t,E=rep(1,length(expe$t)),n=expe$Ex)
+  wt = c(expe$t[1],diff(expe$t))
+  p = list(wt=wt,E=rep(1,length(expe$t)),n=expe$Ex)
   #Ltt2$mu = as.factor(Ltt2$mu)
   phylo2 = p2phylo(p)
   ltt = ltt_stat(phylo,phylo2)
