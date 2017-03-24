@@ -111,14 +111,14 @@ num_weigh <- function(rec, pars_rec, ct){
   return(prob)
 }
 
-sim_est <- function(n_trees, init_par=c(1.8,0.175,60),impsam=FALSE,rec_method=1,seed=0){ # simulate a tree, drop fossil, and estimate parameters back after bootstrap reconstruction
+sim_est <- function(n_trees, init_par=c(1.8,0.175,60),impsam=FALSE,rec_method=1,seed=0,conditionToSurvival=FALSE){ # simulate a tree, drop fossil, and estimate parameters back after bootstrap reconstruction
   if (seed != 0) set.seed(seed)
   st = dmea::sim_phyl()
-  p <- subplex(par = init_par, fn = llik,n = st$n, E = st$E, t = st$wt)$par
+  p <- subplex(par = init_par, fn = llik,n = st$n, E = st$E, t = st$wt,conditionToSurvival=conditionToSurvival)$par
   sit = dmea::drop.fossil(st$newick)
   sit = dmea::phylo2p(sit)
-  trees = sim_srt(wt=sit$wt, pars=p, parallel = F, n_trees = n_trees, rec_method=rec_method)
-  pars = subplex(par = init_par, fn = llik_st , setoftrees = trees, impsam = impsam)$par
+  trees = sim_srt(wt=sit$wt, pars=p, parallel = F, n_trees = n_trees, rec_method=rec_method,conditionToSurvival=conditionToSurvival)
+  pars = subplex(par = init_par, fn = llik_st , setoftrees = trees, impsam = impsam, conditionToSurvival=conditionToSurvival)$par
   return(data.frame(real=p, est=pars))
 }
 
@@ -204,8 +204,8 @@ ltt_mu <- function(mu,phylo,prior_pars,n_trees=10){
   lambda_K = subplex(par =c(2,60), fn = llik_st , setoftrees = trees, mu = mu, impsam = FALSE)$par
   pars = c(lambda_K[1],mu,lambda_K[2])
   expe = expectedLTT2(pars,n_it=n_trees)
-  wt = c(expe$t[1],diff(expe$t))
-  p = list(wt=wt,E=rep(1,length(expe$t)),n=expe$Ex)
+  wt = c(expe$bt[1],diff(expe$bt))
+  p = list(wt=wt,E=rep(1,length(expe$bt)),n=expe$Ex)
   #Ltt2$mu = as.factor(Ltt2$mu)
   phylo2 = p2phylo(p)
   ltt = ltt_stat(phylo,phylo2)
