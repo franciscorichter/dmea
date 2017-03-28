@@ -12,11 +12,14 @@ Depends:
     subplex,
     ggplot2,
     latex2exp,
+    grid,
     gridExtra,
+    gtable,
     foreach,
     doParallel,
     nLTT,
     matrixStats,
     dplyr
+
 
 
