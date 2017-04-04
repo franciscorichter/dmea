@@ -1,4 +1,4 @@
-EM_phylo <- function(wt, init_par, n_trees=10, n_it=30, printpar=TRUE, mu=0.1, impsam=FALSE, tol=0.0001, parallel=F){
+EM_phylo <- function(wt, init_par, n_trees=10, n_it=30, printpar=TRUE, mu=0.1, impsam=FALSE, tol=0.0001, parallel=F, method=1){
   n_pars = length(init_par)
   pars = init_par
   Pars = matrix(nrow=n_it,ncol=n_pars)
@@ -16,7 +16,7 @@ EM_phylo <- function(wt, init_par, n_trees=10, n_it=30, printpar=TRUE, mu=0.1, i
     #,'are parameters on iteration',i,'and took',q[3],'segs'))
     #x1vector(mode='numeric',length = n_it) = pars
     p = proc.time()
-    trees <- sim_srt(wt=wt, pars=pars, n_trees=n_trees)
+    trees <- sim_srt(wt=wt, pars=pars, n_trees=n_trees, rec_method=method)
     pars = subplex(par = pars, fn = llik_st, setoftrees = trees, impsam = impsam)$par
     #x2 = pars
     Pars[i,] = pars

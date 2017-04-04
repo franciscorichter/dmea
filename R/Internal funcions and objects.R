@@ -8,7 +8,17 @@ for (i in 2:26){
   ll = paste(LETTERS[i],LETTERS,":0",sep="")
   SL = c(SL,ll)
 }
-sl=c(sl,SL)
+S1 = paste(LETTERS[1],0:9,":0",sep="")
+for (i in 2:26){
+  ll = paste(LETTERS[i],1:10,":0",sep="")
+  SL = c(SL,ll)
+}
+s1 = paste(letters[1],0:9,":0",sep="")
+for (i in 2:26){
+  ll = paste(letters[i],1:10,":0",sep="")
+  SL = c(SL,ll)
+}
+sl=c(sl,SL,S1,s1)
 compphyl <- function(newi,identf,ct){
   #set to extant species to the present time
   identf[,1] = as.character(identf[,1])
@@ -111,14 +121,14 @@ num_weigh <- function(rec, pars_rec, ct){
   return(prob)
 }
 
-sim_est <- function(n_trees, init_par=c(1.8,0.0175,0.2),impsam=FALSE,rec_method=1,seed=0,conditionToSurvival=FALSE){ # simulate a tree, drop fossil, and estimate parameters back after bootstrap reconstruction
+sim_est <- function(n_trees, pars, init_par=c(1.8,0.13,60),impsam=FALSE,rec_method=1,seed=0,conditionToSurvival=FALSE){ # simulate a tree, drop fossil, and estimate parameters back after bootstrap reconstruction
   if (seed != 0) set.seed(seed)
-  st = dmea::sim_phyl()
-  p <- subplex(par = init_par, fn = llik, n = st$n, E = st$E, t = st$wt, conditionToSurvival=FALSE)$par
+  st = dmea::sim_phyl(lambda0 = pars[1], mu0 = pars[2], K = pars[3])
+  p <- subplex(par = init_par, fn = llik, n = st$n, E = st$E, t = st$wt)$par
   sit = dmea::drop.fossil(st$newick)
   sit = dmea::phylo2p(sit)
-  trees = sim_srt(wt=sit$wt, pars=p, parallel = F, n_trees = n_trees, rec_method=rec_method,  conditionToSurvival=conditionToSurvival)
-  pars = subplex(par = init_par, fn = llik_st , setoftrees = trees, impsam = impsam, conditionToSurvival=conditionToSurvival)$par
+  trees = sim_srt(wt=sit$wt, pars=p, parallel = F, n_trees = n_trees, rec_method=rec_method)
+  pars = subplex(par = init_par, fn = llik_st , setoftrees = trees, impsam = impsam)$par
   return(data.frame(real=p, est=pars))
 }
 
