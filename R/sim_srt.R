@@ -1,4 +1,4 @@
-sim_srt <- function(wt, pars, parallel=F, n_trees,rec_method=1){    # simulate set of reconstructed trees
+sim_srt <- function(wt, pars, parallel=F, n_trees,rec_method=1,mu=NULL){    # simulate set of reconstructed trees
   if(length(pars)==2){
     pars[3] = pars[2]
     pars[2] = mu

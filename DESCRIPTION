@@ -19,7 +19,8 @@ Depends:
     doParallel,
     nLTT,
     matrixStats,
-    dplyr
+    dplyr,
+    rmarkdown
 
 
 
