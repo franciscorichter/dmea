@@ -173,12 +173,15 @@ convol <-function(wt,lambda,mu,remt){
 
 
 
-get_comb_ltt <- function(phylo1,phylo2){
-  t1 = data.frame(ltt.plot.coords(phylo1))[1,1]
-  t2 = data.frame(ltt.plot.coords(phylo2))[1,1]
-  if(round(t1) != round(t2)){print('DIFFERENT LENGHT IN PHYLOGENIES!')}
-  ltt1 = data.frame(ltt.plot.coords(phylo1)[-1,])
-  ltt2 = data.frame(ltt.plot.coords(phylo2)[-1,])
+get_comb_ltt <- function(phylo1,phylo2,phylo=TRUE){
+  # Trabajar aca para generalizarlo a medias de arboles...con phylo=F
+  if(phylo){
+    t1 = data.frame(ltt.plot.coords(phylo1))[1,1]
+    t2 = data.frame(ltt.plot.coords(phylo2))[1,1]
+    if(round(t1) != round(t2)){print('DIFFERENT LENGHT IN PHYLOGENIES!')}
+    ltt1 = data.frame(ltt.plot.coords(phylo1)[-1,])
+    ltt2 = data.frame(ltt.plot.coords(phylo2)[-1,])
+  }
   i = j = 1
   N1 = dim(ltt1)[1]
   N2 = dim(ltt2)[1]
@@ -208,6 +211,44 @@ get_comb_ltt <- function(phylo1,phylo2){
 }
 
 
+get_comb_ltt2 <- function(sot,phyl=NULL){  #pd=phylo_data
+  m = length(sot)
+  time = NULL
+  ind=NULL
+  for(i in 1:m){
+    s=sot[[i]]
+    s = cumsum(s)
+    s = s[-length(s)]
+    time =c(time,s)
+    ind = c(ind,rep(i,length(s)))
+  }
+  if(!is.null(phyl)){
+    s = cumsum(phyl)
+    s = s[-length(s)]
+    time = c(time,s)
+    ind = c(ind,rep((m+1),length(s)))
+    m=m+1
+  }
+  df = data.frame(time=time,ind=ind)
+  df = df[order(time),]
+  df = cbind(df,as.data.frame(matrix(ncol=m,nrow=dim(df)[1])))
+  d2 = as.data.frame(matrix(ncol=(m+2),nrow=1))
+  names(d2) = names(df)
+  vec=rep(1,m)
+  d2[1,] =  c(0,0,vec)
+  df = rbind(d2,df)
+  for(i in 2:dim(df)[1]){
+    # esto puede ser escrito de forma mas eficiente sin cambiar todos los valores cada vez
+    j = df$ind[i]
+    vec[j] = vec[j] + 1
+    df[i,3:(m+2)] = vec
+  }
+  df['mean'] = rowMeans(df[,3:(m+2)])
+  return(df)
+}
+
+
+
 ltt_mu <- function(mu,phylo,prior_pars,n_trees=10){
   po = phylo2p(phylo)
   trees = sim_srt(wt=po$wt,pars = prior_pars,n_trees = n_trees,mu = mu)
@@ -219,7 +260,7 @@ ltt_mu <- function(mu,phylo,prior_pars,n_trees=10){
   #Ltt2$mu = as.factor(Ltt2$mu)
   phylo2 = p2phylo(p)
   ltt = ltt_stat(phylo,phylo2)
-  return(ltt)
+  return(list(ltt=ltt,pars=pars))
 }
 
 

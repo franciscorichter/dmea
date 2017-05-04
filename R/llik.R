@@ -6,7 +6,7 @@ llik = function(pars,n,E,t,conditionToSurvival=FALSE){
   sigma = n*(b[1]-b[2]*n + b[3]) #n-dimentional
   rho = pmax(b[1]*E-b[2]*n*E+b[3]*(1-E),0)
   if(conditionToSurvival){
-    pars1 =  c(pars[1],(pars[1]-pars[2])/pars[3],pars[2])
+    pars1 =  b
     lx = 100 # lx is the size of your ode system. Set it to 10 times thenumber of species, should be at least the number of species
     soc = 1 # soc = 1 when you start at stem age, and 2 when you start atcrown age
     probsn = rep(0,lx)

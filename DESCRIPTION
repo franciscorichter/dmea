@@ -20,7 +20,8 @@ Depends:
     nLTT,
     matrixStats,
     dplyr,
-    rmarkdown
+    rmarkdown,
+    reshape2
 
 
 

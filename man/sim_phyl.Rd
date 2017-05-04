@@ -4,19 +4,18 @@
 \title{Phylogenetic tree simulation
 %%  ~~function to do ... ~~
 }
-\description{It simulates a phylogenetic tree given the model parameters
+\description{Phylogenetic tree simulation, given the model and parameters.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-sim_phyl(ct=15, lambda0=0.8, mu0=0.1, K=40, draw=TRUE, model="dd",printEv=FALSE,seed=FALSE)
+sim_phyl(ct=15, lambda0=0.8, mu0=0.1, K=40, model="dd",printEv=FALSE,seed=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{ct}{Crown time}
   \item{lambda0,mu0}{Speciation and extinction rates parameter (they depends on the model)}
   \item{K}{Carring capacity (For diversity-dependance model only)}
-  \item{Draw}{If Draw=TRUE the simulated phylogenetic tree will be ploted}
-  \item{Model}{Diversification model. The available models are 'dd' for diversity dependance and 'cr' for constant rate model}
+  \item{Model}{Diversification rates model. The available models are 'dd' for diversity dependance and 'cr' for constant rate model}
   \item{PrintEv}{Prints the events while occurring in the tree}
   \item{seed}{Seed for the simulation.}
 %%     ~~Describe \code{x} here~~
@@ -26,10 +25,10 @@ sim_phyl(ct=15, lambda0=0.8, mu0=0.1, K=40, draw=TRUE, model="dd",printEv=FALSE,
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-  \item{t}{ Waiting times of the tree.}
-  \item{E}{ Binomial vector with 0 for extinctions and 1 for speciations at each waiting time.}
-  \item{n}{ Vector with number of species at each waiting time.}
-  \item{newick}{ Tree in Newick format.}
+  \item{tree}{A list containing 4 elements: wt are the waiting times of the tree, E is the binary vector representing speciations or extinctions, n is the number of species at each node of the tree and br are the branching times of the nodes.}
+  \item{phylo}{is the phylo object corresponding to the tree}
+  \item{tree.extant}{Same as tree, but removing extinct species}
+  \item{extant.phylo}{phylo of the extant-species tree}
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
@@ -37,9 +36,9 @@ sim_phyl(ct=15, lambda0=0.8, mu0=0.1, K=40, draw=TRUE, model="dd",printEv=FALSE,
 %% ...
 }
 \references{
-%% ~put references to the literature/web site here ~
+[1] The nice paper
 }
-\author{F. Richter Mendoza
+\author{F. Richter M.
 %%  ~~who you are~~
 }
 \note{
@@ -52,8 +51,8 @@ sim_phyl(ct=15, lambda0=0.8, mu0=0.1, K=40, draw=TRUE, model="dd",printEv=FALSE,
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-st <- sim_phyl2()
-plot(st$newick)
+st <- sim_phyl()
+plot(st$phylo)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

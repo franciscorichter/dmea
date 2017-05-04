@@ -1,4 +1,4 @@
-llik_st = function(pars, setoftrees, impsam = F, mu=0.1, conditionToSurvival=FALSE){
+llik_st = function(pars, setoftrees, impsam = F, mu=NULL, conditionToSurvival=FALSE){
   if(length(pars)==2){
     pars[3] = pars[2]
     pars[2] = mu
