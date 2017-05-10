@@ -1,4 +1,4 @@
-sim_srt <- function(wt, pars, parallel=F, n_trees,rec_method=1,mu=NULL){    # simulate set of reconstructed trees
+sim_srt <- function(wt, pars, parallel=F, n_trees,rec_method=1,mu=NULL,WT=FALSE){    # simulate set of reconstructed trees
   if(length(pars)==2){
     pars[3] = pars[2]
     pars[2] = mu
@@ -14,7 +14,8 @@ sim_srt <- function(wt, pars, parallel=F, n_trees,rec_method=1,mu=NULL){    # si
     trees = vector('list',length=n_trees)
     for (i in 1:n_trees){
       rec = dmea::rec_tree(wt=wt, pars=pars,rec_method = rec_method)
-      trees[[i]] = rec
+      if(WT){trees[[i]] = rec$wt}
+      else{trees[[i]] = rec}
     }
   }
   # w=0

@@ -101,5 +101,5 @@ sim_phyl <- function(ct=15, lambda0=0.8, mu0=0.1, K=40, model="dd", printEv=FALS
   n[i] = n[i-1] + E[i-1] - (1-E[i-1])
   newick.extant = drop.fossil(newick)
   newick.extant.p = phylo2p(newick.extant)
-  return(list(tree=list(wt=Tm, E=E, n=n, br = cumsum(Tm)), phylo = newick, tree.extant = newick.extant.p, phylo.extant=newick.extant, wt=Tm, E=E, n=n, newick=newick, br = cumsum(Tm), newick.extant = newick.extant, newick.extant.p = newick.extant.p, L=L, r=reboot2))
+  return(list(tree=list(wt=Tm, E=E, n=n, br = cumsum(Tm)), phylo = newick, tree.extant = newick.extant.p, phylo.extant=newick.extant, wt=Tm, E=E, n=n, newick=newick, br = cumsum(Tm), newick.extant = newick.extant, newick.extant.p = newick.extant.p, L=L, r=reboot2,newi=newi))
 }

@@ -125,8 +125,7 @@ sim_est <- function(n_trees, pars, init_par=c(1.8,0.13,60),impsam=FALSE,rec_meth
   if (seed != 0) set.seed(seed)
   st = dmea::sim_phyl(lambda0 = pars[1], mu0 = pars[2], K = pars[3])
   p <- subplex(par = init_par, fn = llik, n = st$n, E = st$E, t = st$wt)$par
-  sit = dmea::drop.fossil(st$newick)
-  sit = dmea::phylo2p(sit)
+  sit = st$tree.extant
   trees = sim_srt(wt=sit$wt, pars=p, parallel = F, n_trees = n_trees, rec_method=rec_method)
   pars = subplex(par = init_par, fn = llik_st , setoftrees = trees, impsam = impsam)$par
   return(data.frame(real=p, est=pars))

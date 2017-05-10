@@ -13,6 +13,7 @@ llik_st = function(pars, setoftrees, impsam = F, mu=NULL, conditionToSurvival=FA
         l[i] = 0
       }
       else{
+        weight = 1
         l[i] = llik(pars=pars,n=s$n,E=s$E,t=s$wt,conditionToSurvival=conditionToSurvival)*weight
       }
     }
