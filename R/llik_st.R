@@ -8,14 +8,14 @@ llik_st = function(pars, setoftrees, impsam = F, mu=NULL, conditionToSurvival=FA
   for(i in 1:m){
     s = setoftrees[[i]]
     if(impsam){
-      weight = exp(s$weight)
-      if(weight == 0){
-        l[i] = 0
-      }
-      else{
-        weight = 1
+      #weight = exp(s$weight)
+      #if(weight == 0){
+      #  l[i] = 0
+      #}
+      #else{
+        weight = s$weight
         l[i] = llik(pars=pars,n=s$n,E=s$E,t=s$wt,conditionToSurvival=conditionToSurvival)*weight
-      }
+      #}
     }
     else{
       l[i] = llik(pars=pars,n=s$n,E=s$E,t=s$wt,conditionToSurvival=conditionToSurvival)

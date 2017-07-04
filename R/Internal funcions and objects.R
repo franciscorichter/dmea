@@ -36,9 +36,9 @@ compphyl <- function(newi,identf,ct){
 
 
 par_est_vis <- function(P,par,PR){
-  #P is the recost estim values
+  # P is the recost estim values
   # par is the parameter you want to use
-  #PR is the real estim
+  # PR is the real estim
   if (par == 1){
     int = 0.8 #change for general case
     parname = 'lambda'
@@ -132,10 +132,8 @@ sim_est <- function(n_trees, pars, init_par=c(1.8,0.13,60),impsam=FALSE,rec_meth
 }
 
 number_missing <- function(st){
-  total = length(st$t)
-  drop = drop.fossil(st$newick)
-  drop = phylo2p(drop)
-  extant = length(drop$t)
+  total = length(st$tree$wt)
+  extant = length(st$tree.extant$wt)
   missing = (total - extant)/2
   return(missing)
 }
@@ -184,7 +182,7 @@ get_comb_ltt <- function(phylo1,phylo2,phylo=TRUE){
   i = j = 1
   N1 = dim(ltt1)[1]
   N2 = dim(ltt2)[1]
-  comb_ltt = data.frame(time=NULL,n1=NULL,n2=NULL)
+  comb_ltt = data.frame(time=NULL, n1=NULL, n2=NULL)
   while(i <= N1 & j <= N2 ){
     check = T
     if(ltt1$time[i] < ltt2$time[j]){
@@ -210,12 +208,15 @@ get_comb_ltt <- function(phylo1,phylo2,phylo=TRUE){
 }
 
 
+
 get_comb_ltt2 <- function(sot,phyl=NULL){  #pd=phylo_data
   m = length(sot)
   time = NULL
   ind=NULL
   for(i in 1:m){
     s=sot[[i]]
+    s=phylo2p(s)
+    s=s$wt
     s = cumsum(s)
     s = s[-length(s)]
     time =c(time,s)
