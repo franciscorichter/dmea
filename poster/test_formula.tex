@@ -1,0 +1,19 @@
+
+\documentclass[final]{beamer}
+
+\usepackage{amsmath, amsthm, amssymb, amsfonts}
+\usepackage{tikzsymbols}
+\usepackage{tikz}
+\usepackage{bigints}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture] \node (#1) {};}
+\tikzset{square arrow/.style={to path={-- ++(0,-2.25)  -| (\tikztotarget) \tikztonodes},below,pos=3.75}}
+
+\begin{document}
+
+ \[  Q(\theta | \tikzmark{a}{\theta_{(i)}}) = \bigint\limits_{\{ {\small \Springtree, \Autumntree, \Summertree,...} \}} logL(\theta|\Wintertree) d\Wintertree \longrightarrow \tikzmark{b}{\theta_{(i+1)}} = \displaystyle\argmax_{\theta} Q(\theta | \theta_{(i)} ) \] 
+ 
+   \tikz[overlay,remember picture]
+   {\draw[->,square arrow] (b.south) to (a.south);}
+   
+\end{document}

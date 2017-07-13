@@ -1,0 +1,8 @@
+devtools::install_github("franciscorichter/dmea")
+library('dmea')
+tree = read.nexus(file='BirdTree.tre')
+tree = phylo2p(phylo)
+time = proc.time()
+EMbirds = EM_phylo(wt=tree$wt,init_par=c(0.2,0.02,34000),parallel = TRUE,n_trees = 10,n_it = 30)
+print(proc.time()-time)
+save(EMbirds, file = 'EMbirsd.RData')

@@ -35,20 +35,20 @@ compphyl <- function(newi,identf,ct){
 ###
 
 
-par_est_vis <- function(P,par,PR){
+par_est_vis <- function(P,par,PR,true){
   # P is the recost estim values
   # par is the parameter you want to use
   # PR is the real estim
   if (par == 1){
-    int = 0.8 #change for general case
+    int = true
     parname = 'lambda'
   }
   if (par==2){
-    int= 0.1
+    int= true
     parname = 'mu'
   }
   if (par == 3){
-    int = 40
+    int = true
     parname = 'K'
     n = dim(P)[1]
     P1 = P[P[,3]<100 & PR[,3]<100,]
